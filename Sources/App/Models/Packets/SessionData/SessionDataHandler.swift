@@ -13,5 +13,13 @@ class SessionDataHandler: PacketHandler {
     
     func processPacket(data: inout ByteBuffer) {
         
+        do {
+            let object = try PacketType(data: &data)
+            print(object)
+        } catch {
+            print("SESSION DATA HANDLER CATCH")
+        }
+        
+        
     }
 }

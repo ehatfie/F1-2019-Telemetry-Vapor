@@ -9,7 +9,7 @@ import Foundation
 import NIO
 
 struct SessionDataPacket {
-    let header: PacketHeader
+    let header: PacketHeader?
     let weather: Int?                // uint8 0  = clear, 1  = lightCloud, 2  = overcast, 3  = lightRain, 4  = heavyRain, 5  = storm
     let trackTemperature: Int? //int8      // track temperature in degrees
     let airTemperature: Int? //int8        // air temperature in celcius
@@ -34,46 +34,41 @@ struct SessionDataPacket {
     let marshalZones: [MarshalZone] // list of marshal zones
     let safetyCarStatus: Int? // uint8      // 0 = no safety car, 1 = full safety car, 2 = virtual safety car
     let networkGame: Int? // uint8          // 0 = offline, 1 = online
-    let id: String // teamId
     
-    init(header: PacketHeader, data: ByteBuffer) throws {
+    init(header: PacketHeader? = nil, data: inout ByteBuffer) throws {
         self.header = header
         
-        var dataCopy = data
+        self.weather = data.readInt(as: UInt8.self)
+        self.trackTemperature = data.readInt(as: Int8.self)
+        self.airTemperature = data.readInt(as: Int8.self)
         
-        self.weather = dataCopy.readInt(as: Int8.self)
-        self.trackTemperature = dataCopy.readInt(as: Int8.self)
-        self.airTemperature = dataCopy.readInt(as: Int8.self)
+        self.totalLaps = data.readInt(as: UInt8.self)
+        self.trackLength = data.readInt(as: UInt16.self)
+        self.sessionType = data.readInt(as: UInt8.self)
+        self.trackId = data.readInt(as: Int8.self)
+        self.m_formula = data.readInt(as: UInt8.self)
         
-        self.totalLaps = dataCopy.readInt(as: Int8.self)
-        self.trackLength = dataCopy.readInt(as: Int16.self)
-        self.sessionType = dataCopy.readInt(as: Int8.self)
-        self.trackId = dataCopy.readInt(as: Int8.self)
-        self.m_formula = dataCopy.readInt(as: Int8.self)
+        self.sessionTimeLeft = data.readInt(as: UInt16.self)
+        self.sessionDuration = data.readInt(as: UInt16.self)
         
-        self.sessionTimeLeft = dataCopy.readInt(as: Int16.self)
-        self.sessionDuration = dataCopy.readInt(as: Int16.self)
+        self.pitSpeedLimiter = data.readInt(as: UInt8.self)
         
-        self.pitSpeedLimiter = dataCopy.readInt(as: Int8.self)
-        
-        self.gamePaused = dataCopy.readInt(as: Int8.self)
-        self.isSpectating = dataCopy.readInt(as: Int8.self)
-        self.spectatorCarIndex = dataCopy.readInt(as: Int8.self)
-        self.sliProNativeSupport = dataCopy.readInt(as: Int8.self)
+        self.gamePaused = data.readInt(as: UInt8.self)
+        self.isSpectating = data.readInt(as: UInt8.self)
+        self.spectatorCarIndex = data.readInt(as: UInt8.self)
+        self.sliProNativeSupport = data.readInt(as: UInt8.self)
         
         
-        self.numMarshalZones = dataCopy.readInt(as: Int8.self)
+        self.numMarshalZones = data.readInt(as: UInt8.self)
         
         var raceMarshalZones = [MarshalZone]()
-        for _ in 0...4 {
-            raceMarshalZones.append(try MarshalZone(data: dataCopy))
-            //let temp1: Float? = dataCopy.readFloat()
-            //let temp2 = dataCopy.readInt(as: Int8.self)
+        for _ in 0..<(numMarshalZones ?? 1) {
+            raceMarshalZones.append(try MarshalZone(data: &data))
         }
         
         self.marshalZones = raceMarshalZones
-        self.safetyCarStatus = dataCopy.readInt(as: Int8.self)
-        self.networkGame = dataCopy.readInt(as: Int8.self)
-        self.id = TeamIDs[dataCopy.readInt(as: Int8.self) ?? 404] ?? "NO SESSION TEAM ID"
+        self.safetyCarStatus = data.readInt(as: UInt8.self)
+        self.networkGame = data.readInt(as: UInt8.self)
+        print()
     }
 }

@@ -21,8 +21,7 @@ final class UdpEchoHandler: ChannelInboundHandler {
             let header = try PacketHeader(data: &byteBuffer)
             let packetInfo = try PacketInfo(format: header.packetFormat, version: header.packetVersion, type: header.packetId)
             if let handler = HeaderFieldsToPacketType[packetInfo] {
-                print("HANDLER \(handler)")
-                
+                handler.processPacket(data: &byteBuffer)
             }
             
         } catch {

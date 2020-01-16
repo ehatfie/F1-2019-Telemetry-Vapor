@@ -293,13 +293,4 @@ let HeaderFieldsToPacketType: [PacketInfo: PacketHandler] = [
     PacketInfo(format: 2019, version: 1, type: 5): CarSetupDataHandler(),
     PacketInfo(format: 2019, version: 1, type: 6): CarTelemetryDataHandler(),
     PacketInfo(format: 2019, version: 1, type: 7): CarStatusDataHandler()
-    
-//    (2019, 1, 0): MotionDataPacket.self,
-//    (2019, 1, 1): SessionDataPacket.self,
-//    (2019, 1, 2): LapDataPacket.self,
-//    (2019, 1, 3): EventDataPacket.self,
-//    (2019, 1, 4): ParticipantDataPacket.self,
-//    (2019, 1, 5): CarSetupPacket.self,
-//    (2019, 1, 6): CarTelemetryDataPacket.self,
-//    (2019, 1, 7): CarStatusDataPacket.self
 ]
