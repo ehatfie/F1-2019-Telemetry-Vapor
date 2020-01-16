@@ -53,7 +53,7 @@ public func startUDP() {
     do {
         let channel = try datagramBootstrap.bind(host: bindToAddress, port: port).wait()
         
-        print("Channel accepting connections on \(channel.localAddress!) \(channel.register())")
+        print("Channel accepting connections on \(channel.localAddress!))")
         
         try channel.closeFuture.wait()
         
