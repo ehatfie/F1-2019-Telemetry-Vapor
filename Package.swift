@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "app",
+    name: "F1-2019-Telemetry-Vapor",
     platforms: [
        .macOS(.v10_14)
     ],
