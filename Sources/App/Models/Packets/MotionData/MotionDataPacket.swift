@@ -8,6 +8,18 @@
 import Foundation
 import Vapor
 
+protocol PacketHandler {
+    func processPacket(data: inout ByteBuffer)
+}
+
+class MotionDataPacketHandler: PacketHandler {
+    typealias PacketType = MotionDataPacket
+    
+    func processPacket(data: inout ByteBuffer) {
+        
+    }
+}
+
 struct MotionDataPacket {
     let header: PacketHeader
     var carMotionData: [CarMotionData]

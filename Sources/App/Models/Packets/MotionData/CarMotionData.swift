@@ -72,7 +72,7 @@ extension ByteBuffer {
     mutating func readInt<T: FixedWidthInteger>(as: T.Type = T.self) -> Int? {
         guard let data = self.readInteger(endianness: .little, as: T.self) else { return nil }
         
-        return Int(data)
+        return Int(truncatingIfNeeded: data)
     }
     
     mutating func readFloat() -> Float? {

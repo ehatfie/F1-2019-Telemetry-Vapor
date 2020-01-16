@@ -12,13 +12,28 @@ final class UdpEchoHandler: ChannelInboundHandler {
     typealias InboundIn = AddressedEnvelope<ByteBuffer>
     
     public func channelRead(context: ChannelHandlerContext, data: NIOAny) {
-        var addressedEnvelope = self.unwrapInboundIn(data)
+        let addressedEnvelope = self.unwrapInboundIn(data)
         let readableBytes = addressedEnvelope.data.readerIndex
         
         var byteBuffer = addressedEnvelope.data
         
-        var packetFormat = byteBuffer.readInt(as: UInt16.self)
-        print("PACKET FORMAT \(packetFormat)")
+        do {
+            let header = try PacketHeader(data: &byteBuffer)
+            let packetInfo = try PacketInfo(format: header.packetFormat, version: header.packetVersion, type: header.packetId)
+            if let handler = HeaderFieldsToPacketType[packetInfo] {
+                print("HANDLER \(handler)")
+                
+            }
+            
+        } catch {
+            print("ERROR WITH HEADER")
+        }
+    }
+    
+    func read(data: inout ByteBuffer) throws {
+        
+        let header = try PacketHeader(data: &data)
+        print("HEADER \(header)")
     }
 }
 
@@ -48,7 +63,7 @@ public func startUDP() {
         .first ?? defaultPort // get port or use default if no valid port was provided
     
     // TODO: get this address from commandline
-    let bindToAddress = "127.0.0.1"
+    let bindToAddress = "192.168.1.119"
     
     do {
         let channel = try datagramBootstrap.bind(host: bindToAddress, port: port).wait()

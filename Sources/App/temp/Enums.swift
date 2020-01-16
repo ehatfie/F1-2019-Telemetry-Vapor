@@ -253,7 +253,47 @@ let SurfaceTypes: [Int: String] = [
     11: "Ridged"
 ]
 
-//let HeaderFieldsToPacketType: [(Int, Int, Int): Packet.Type] = [
+struct E: Error {
+    
+}
+
+struct PacketInfo: Hashable {
+    let packetFormat: Int
+    let packetVersion: Int
+    let packetType: Int
+    
+    init (format: Int?, version: Int?, type: Int?) throws {
+        guard
+            let format = format,
+            let version = version,
+            let type = type
+        else {
+            throw E()
+        }
+        
+        self.packetFormat = format
+        self.packetVersion = version
+        self.packetType = type
+    }
+    
+    // default initializer
+    init (format: Int, version: Int, type: Int) {
+        self.packetFormat = format
+        self.packetVersion = version
+        self.packetType = type
+    }
+}
+
+let HeaderFieldsToPacketType: [PacketInfo: PacketHandler] = [
+    PacketInfo(format: 2019, version: 1, type: 0): MotionDataPacketHandler(),
+    PacketInfo(format: 2019, version: 1, type: 1): SessionDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 2): LapDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 3): EventDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 4): ParticipantDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 5): CarSetupDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 6): CarTelemetryDataHandler(),
+    PacketInfo(format: 2019, version: 1, type: 7): CarStatusDataHandler()
+    
 //    (2019, 1, 0): MotionDataPacket.self,
 //    (2019, 1, 1): SessionDataPacket.self,
 //    (2019, 1, 2): LapDataPacket.self,
@@ -262,4 +302,4 @@ let SurfaceTypes: [Int: String] = [
 //    (2019, 1, 5): CarSetupPacket.self,
 //    (2019, 1, 6): CarTelemetryDataPacket.self,
 //    (2019, 1, 7): CarStatusDataPacket.self
-//]
+]
