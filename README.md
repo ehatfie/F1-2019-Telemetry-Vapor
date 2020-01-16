@@ -18,3 +18,9 @@
         <img src="http://img.shields.io/badge/swift-5-brightgreen.svg" alt="Swift 5">
     </a>
 </p>
+
+F1 2019 Telemetry Processor using Vapor 4
+
+vapor update -y OR vapor build
+vapor xcode -y  <-- creates xcode project (optional)
+vapor run       <-- runs in console
