@@ -1,5 +1,6 @@
 import Fluent
 import Vapor
+import NIO
 
 final class Todo: Model, Content {
     static let schema = "todos"
@@ -12,8 +13,12 @@ final class Todo: Model, Content {
 
     init() { }
 
-    init(id: Int? = nil, title: String) {
+    init(id: Int? = nil, title: String, data: ByteBuffer) {
         self.id = id
         self.title = title
+        
+        var dataCopy = data
+        
+        
     }
 }
