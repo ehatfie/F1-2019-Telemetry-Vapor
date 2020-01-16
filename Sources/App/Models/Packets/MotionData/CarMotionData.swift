@@ -71,13 +71,19 @@ struct CarMotionData {
 extension ByteBuffer {
     mutating func readInt<T: FixedWidthInteger>(as: T.Type = T.self) -> Int? {
         guard let data = self.readInteger(endianness: .little, as: T.self) else { return nil }
-        
         return Int(truncatingIfNeeded: data)
     }
     
     mutating func readFloat() -> Float? {
-        guard let data = self.readInteger(endianness: .little, as: UInt32.self) else { return nil }
+        var data1 = [UInt8]()
         
-        return Float(data)
+        for _ in 0..<4 {
+            guard let data = self.readInteger(endianness: .little, as: UInt8.self) else { return nil }
+            data1.append(data)
+        }
+        
+        let dataObject = Data(data1)
+        
+        return dataObject.withUnsafeBytes({$0.load(as: Float.self)})
     }
 }
