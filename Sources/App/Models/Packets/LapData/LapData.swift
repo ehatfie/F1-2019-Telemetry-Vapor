@@ -31,30 +31,27 @@ struct LapData {
     let driverStatus: Int?           // uint8 0 = inGarage, 1 = flyingLap, 2 = inLap, 3 = outLap, 4 = onTrack
     let resultStatus: Int?           // uint8 0 = invalid, 1 = inactive, 2 = active, 3 = finished, 4 = disqualified, 5 = notClassified, 6 = retired
     
-    init(data: ByteBuffer) throws {
-        var dataCopy = data
+    init(data: inout ByteBuffer) throws {
+        self.lastLapTime = data.readFloat()
+        self.currentLapTime = data.readFloat()
+        self.bestLapTime = data.readFloat()
         
+        self.sector1Time = data.readFloat()
+        self.sector2Time = data.readFloat()
         
-        self.lastLapTime = dataCopy.readFloat()
-        self.currentLapTime = dataCopy.readFloat()
-        self.bestLapTime = dataCopy.readFloat()
+        self.lapDistance = data.readFloat()
+        self.totalDistance = data.readFloat()
         
-        self.sector1Time = dataCopy.readFloat()
-        self.sector2Time = dataCopy.readFloat()
-        
-        self.lapDistance = dataCopy.readFloat()
-        self.totalDistance = dataCopy.readFloat()
-        
-        self.safetyCarDelta = dataCopy.readFloat()
-        self.carPosition = dataCopy.readInt(as: UInt8.self)
-        self.currentLapNum = dataCopy.readInt(as: UInt8.self)
-        self.pitStatus = dataCopy.readInt(as: UInt8.self)
-        self.sector = dataCopy.readInt(as: UInt8.self)
-        self.currentLapInvalid = dataCopy.readInt(as: UInt8.self)
-        self.penalties = dataCopy.readInt(as: UInt8.self)
-        self.gridPosition = dataCopy.readInt(as: UInt8.self)
-        self.driverStatus = dataCopy.readInt(as: UInt8.self)
-        self.resultStatus = dataCopy.readInt(as: UInt8.self)
+        self.safetyCarDelta = data.readFloat()
+        self.carPosition = data.readInt(as: UInt8.self)
+        self.currentLapNum = data.readInt(as: UInt8.self)
+        self.pitStatus = data.readInt(as: UInt8.self)
+        self.sector = data.readInt(as: UInt8.self)
+        self.currentLapInvalid = data.readInt(as: UInt8.self)
+        self.penalties = data.readInt(as: UInt8.self)
+        self.gridPosition = data.readInt(as: UInt8.self)
+        self.driverStatus = data.readInt(as: UInt8.self)
+        self.resultStatus = data.readInt(as: UInt8.self)
     }
     
 }

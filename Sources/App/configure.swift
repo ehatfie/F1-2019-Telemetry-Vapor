@@ -13,6 +13,7 @@ func configure(_ app: Application) throws {
     // Configure migrations
     app.migrations.add(CreateTodo())
     
+    app.views.use(.leaf)
     
     try routes(app)
 }

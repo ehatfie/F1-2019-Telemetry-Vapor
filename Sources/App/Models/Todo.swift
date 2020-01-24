@@ -13,11 +13,9 @@ final class Todo: Model, Content {
 
     init() { }
 
-    init(id: Int? = nil, title: String, data: ByteBuffer) {
+    init(id: Int? = nil, title: String) {
         self.id = id
         self.title = title
-        
-        var dataCopy = data
         
         
     }

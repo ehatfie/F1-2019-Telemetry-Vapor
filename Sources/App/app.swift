@@ -6,8 +6,14 @@ public func app(_ environment: Environment) throws -> Application {
     let app = Application(environment)
     try configure(app)
     
-    startUDP()
-    
+        DispatchQueue.global().async {
+            do {
+                startUDP()
+            } catch {
+                
+            }
+    }
+    print("THREAD")
     return app
 }
 

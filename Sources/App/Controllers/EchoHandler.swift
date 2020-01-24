@@ -66,7 +66,7 @@ public func startUDP() {
     
     do {
         let channel = try datagramBootstrap.bind(host: bindToAddress, port: port).wait()
-        
+
         print("Channel accepting connections on \(channel.localAddress!))")
         
         try channel.closeFuture.wait()
@@ -74,6 +74,13 @@ public func startUDP() {
     } catch {
         print("ERROR CATCH")
     }
-    
+
     print("Channel closed")
+}
+//testing
+func getUdpEventLoop() -> EventLoopFuture<Void> {
+    let group = MultiThreadedEventLoopGroup(numberOfThreads: 4)
+    let future = group.future()
+
+    return future
 }
