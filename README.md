@@ -24,3 +24,5 @@ F1 2019 Telemetry Processor using Vapor 4
 vapor update -y OR vapor build
 vapor xcode -y  <-- creates xcode project (optional)
 vapor run       <-- runs in console
+
+better one for f1 2020: https://github.com/ehatfie/F12020TelemetryVapor
